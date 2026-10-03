@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME TOKENS
+   ═══════════════════════════════════════════════════════════════ */
+@theme {
+  /* Primary green palette – shared brand identity */
+  --color-primary-50: #f0fdf4;
+  --color-primary-100: #dcfce7;
+  --color-primary-200: #bbf7d0;
+  --color-primary-300: #86efac;
+  --color-primary-400: #4ade80;
+  --color-primary-500: #22c55e;
+  --color-primary-600: #16a34a;
+  --color-primary-700: #15803d;
+  --color-primary-800: #166534;
+  --color-primary-900: #14532d;
+  --color-primary-950: #052e16;
+
+  /* Dark backgrounds */
+  --color-dark-900: #0f1a12;
+  --color-dark-800: #132218;
+  --color-dark-700: #1a3022;
+  --color-dark-600: #1e3a29;
+
+  /* Services page – cool teal/blue accent palette */
+  --color-service-50: #f0fdfa;
+  --color-service-100: #ccfbf1;
+  --color-service-200: #99f6e4;
+  --color-service-300: #5eead4;
+  --color-service-400: #2dd4bf;
+  --color-service-500: #14b8a6;
+  --color-service-600: #0d9488;
+  --color-service-700: #0f766e;
+  --color-service-800: #115e59;
+  --color-service-900: #134e4a;
+
+  /* Service dark slate */
+  --color-slate-850: #0f1729;
+  --color-slate-800: #1e293b;
+  --color-slate-750: #243044;
+  --color-slate-700: #334155;
+
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE
+   ═══════════════════════════════════════════════════════════════ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 3px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   GPU-ACCELERATED KEYFRAMES
+   All animations use transform / opacity only (composite layer).
+   No layout or paint triggers.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Shared – Floating particles (home green, service teal) */
+@keyframes particleFloat {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(12px, -18px, 0) scale(1.15); }
+  100% { transform: translate3d(-8px, 14px, 0) scale(0.9); }
+}
+
+/* Home – Gentle hero text slide-in */
+@keyframes heroSlideIn {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* Home – Badge float */
+@keyframes badgeFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50%      { transform: translate3d(0, -10px, 0) rotate(1deg); }
+}
+
+/* Home – Card tilt on hover (3D perspective) */
+@keyframes cardShine {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Service – Technical pulse ring */
+@keyframes pulseRing {
+  0%   { transform: scale(0.95); opacity: 0.7; }
+  70%  { transform: scale(1.25); opacity: 0; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* Service – Glow sweep across cards */
+@keyframes glowSweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); }
+  100% { transform: translateX(200%) skewX(-15deg); }
+}
+
+/* Service – Process step connector pulse */
+@keyframes connectorPulse {
+  0%, 100% { opacity: 0.3; }
+  50%      { opacity: 1; }
+}
+
+/* Fade-in generic */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+
+.animate-fade-in     { animation: fadeIn 0.5s ease-out forwards; }
+.animate-fade-in-up  { animation: fadeInUp 0.6s ease-out forwards; }
+.animate-hero-slide  { animation: heroSlideIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards; }
+.animate-badge-float { animation: badgeFloat 4s ease-in-out infinite; }
+
+/* ── HOME: 3D Tilt Card ── */
+.home-card-3d {
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+.home-card-3d-inner {
+  transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s ease;
+  transform-style: preserve-3d;
+}
+
+.home-card-3d:hover .home-card-3d-inner {
+  transform: rotateY(-3deg) rotateX(2deg) translateZ(8px);
+  box-shadow: 0 20px 40px -12px rgba(22, 163, 74, 0.18),
+              0 8px 20px -8px rgba(0,0,0,0.1);
+}
+
+/* Shine sweep overlay */
+.home-card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.home-card-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.12) 45%,
+    rgba(255,255,255,0.06) 50%,
+    transparent 55%
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  pointer-events: none;
+}
+.home-card-shine:hover::after {
+  animation: glowSweep 0.8s ease forwards;
+}
+
+/* ── SERVICE: Glow border cards ── */
+.service-glow-card {
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.service-glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(14, 148, 136, 0.06) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+.service-glow-card:hover {
+  border-color: rgba(14, 148, 136, 0.4);
+  box-shadow: 0 0 24px -4px rgba(14, 148, 136, 0.15),
+              0 8px 24px -8px rgba(0,0,0,0.12);
+}
+.service-glow-card:hover::before {
+  opacity: 1;
+}
+
+/* ── SERVICE: Pulse ring for step numbers ── */
+.service-pulse-ring {
+  position: relative;
+}
+.service-pulse-ring::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(14, 148, 136, 0.4);
+  animation: pulseRing 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ── SERVICE: Process connector line ── */
+.service-connector {
+  position: relative;
+}
+.service-connector::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -1.5rem;
+  width: 1.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(14,148,136,0.5), transparent);
+  animation: connectorPulse 2s ease-in-out infinite;
+}
+.service-connector:last-child::after {
+  display: none;
+}
+
+/* ── Glassmorphism (Home stats) ── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ── Grid pattern overlay (Service hero) ── */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(14,148,136,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14,148,136,0.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PERFORMANCE: Reduce motion for accessibility
+   ═══════════════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
